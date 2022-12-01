@@ -3,20 +3,19 @@ import { Link, useNavigate } from "react-router-dom";
 
 const Notelist = () => {
   const [noteData, noteDatause] = useState(null);
-  const [value, setvalue] = useState("");
+  const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
 
   const loadEdit = (id) => {
     navigate("note/edit/" + id);
   };
-  const handleSearch = async (e) => {};
 
   const removeFunction = (id) => {
     if (window.confirm("Do you want to remove?")) {
       fetch("http://localhost:8000/notes/" + id, {
         method: "DELETE",
       })
-        .then((resp) => {
+        .then(() => {
           alert("Removed successfully");
           window.location.reload();
         })
@@ -46,18 +45,13 @@ const Notelist = () => {
           <h2>Note list</h2>
         </div>
         <div align={"left"}>
-          <form onSubmit={handleSearch}>
+          <form>
             <input
               type={"text"}
               className="form-controll"
               placeholder="Search Note Name"
-              value={value}
-              onChange={(e) => setvalue(e.target.value)}
+              onChange={(e) => setSearchValue(e.target.value)}
             />
-            <button type="submit" className="btn btn-primary">
-              Search
-            </button>
-            <button className="btn btn-danger">Reset</button>
           </form>
         </div>
         <div className="card-body">
@@ -70,7 +64,7 @@ const Notelist = () => {
             <thead className="bg-dark text-white">
               <tr>
                 <td>Id</td>
-                <td>category</td>
+                <td filter>category</td>
                 <td>Note Name</td>
                 <td>Note</td>
                 <td>Date</td>
@@ -79,33 +73,39 @@ const Notelist = () => {
             </thead>
             <tbody>
               {noteData &&
-                noteData.map((item) => (
-                  <tr key={item.id}>
-                    <td>{item.id}</td>
-                    <td>{item.category}</td>
-                    <td>{item.noteName}</td>
-                    <td>{item.note}</td>
-                    <td>{item.date}</td>
-                    <td>
-                      <a
-                        onClick={() => {
-                          loadEdit(item.id);
-                        }}
-                        className="btn btn-success"
-                      >
-                        Edit
-                      </a>
-                      <a
-                        onClick={() => {
-                          removeFunction(item.id);
-                        }}
-                        className="btn btn-danger"
-                      >
-                        Remove
-                      </a>
-                    </td>
-                  </tr>
-                ))}
+                noteData
+                  .filter((item) =>
+                    item.noteName
+                      .toLowerCase()
+                      .includes(searchValue.toLocaleLowerCase())
+                  )
+                  .map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.id}</td>
+                      <td>{item.category}</td>
+                      <td>{item.noteName}</td>
+                      <td>{item.note}</td>
+                      <td>{item.date}</td>
+                      <td>
+                        <a
+                          onClick={() => {
+                            loadEdit(item.id);
+                          }}
+                          className="btn btn-success"
+                        >
+                          Edit
+                        </a>
+                        <a
+                          onClick={() => {
+                            removeFunction(item.id);
+                          }}
+                          className="btn btn-danger"
+                        >
+                          Remove
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
             </tbody>
           </table>
         </div>

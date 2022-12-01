@@ -38,16 +38,6 @@ const Notecreate = () => {
                   <div className="row">
                     <div className="col=lg-12">
                       <div className="form-group">
-                        <label>Id</label>
-
-                        <input
-                          value={id}
-                          disabled="disabled"
-                          className="form-control"
-                        ></input>
-                      </div>
-
-                      <div className="form-group">
                         <label>Category</label>
                         <input
                           value={category}
@@ -65,11 +55,11 @@ const Notecreate = () => {
                       </div>
                       <div className="form-group">
                         <label>Note</label>
-                        <input
+                        <textarea
                           value={note}
                           onChange={(e) => noteChange(e.target.value)}
                           className="form-control"
-                        ></input>
+                        ></textarea>
                       </div>
                       <div className="form-group">
                         <label>Date</label>
